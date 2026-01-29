@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SSH-Manage - 极客风格的 SSH Web 客户端">
+  <title>SSH-Manage | Terminal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/src/styles/index.css">
+</head>
+
+<body>
+  <div id="app">
+    <!-- 扫描线效果 -->
+    <div class="scanlines"></div>
+
+    <!-- 顶部标题栏 -->
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">⌘</span>
+        <span class="logo-text">SSH-MANAGE</span>
+        <span class="version">v1.0</span>
+      </div>
+      <div class="header-status">
+        <span class="status-indicator online"></span>
+        <span class="status-text">SYSTEM READY</span>
+      </div>
+    </header>
+
+    <!-- 标签栏 -->
+    <nav class="tab-bar" id="tabBar">
+      <button class="tab-add" id="tabAdd" title="新建连接">
+        <span>+</span>
+      </button>
+      <div class="tabs-container" id="tabsContainer">
+        <!-- 动态标签 -->
+      </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+      <!-- 左侧：历史记录面板 -->
+      <aside class="history-panel" id="historyPanel">
+        <div class="panel-header">
+          <span class="panel-icon">◷</span>
+          <span>CONNECTIONS</span>
+        </div>
+        <ul class="history-list" id="historyList">
+          <!-- 动态历史记录 -->
+        </ul>
+      </aside>
+
+      <!-- 终端区域 -->
+      <section class="terminal-area" id="terminalArea">
+        <div class="terminal-placeholder" id="terminalPlaceholder">
+          <div class="placeholder-content">
+            <div class="placeholder-logo">
+              <span class="placeholder-icon">⌘</span>
+              <h1 class="placeholder-title">SSH MANAGE</h1>
+              <p class="placeholder-subtitle">Secure Shell Web Terminal</p>
+            </div>
+            <p class="placeholder-text">[ 点击 <span class="highlight">+</span> 创建新连接 ]</p>
+          </div>
+        </div>
+        <div class="terminals-wrapper" id="terminalsWrapper">
+          <!-- 动态终端实例 -->
+        </div>
+      </section>
+
+      <!-- 右侧滑出：连接表单面板 -->
+      <aside class="connect-drawer" id="connectDrawer">
+        <div class="drawer-header">
+          <div class="drawer-title">
+            <span class="panel-icon">◈</span>
+            <span>NEW CONNECTION</span>
+          </div>
+          <button class="drawer-close" id="drawerClose" title="关闭">×</button>
+        </div>
+
+        <form class="connect-form" id="connectForm">
+          <div class="form-group">
+            <label for="host">
+              <span class="label-icon">⊕</span> HOST
+            </label>
+            <input type="text" id="host" name="host" placeholder="192.168.1.100" required>
+          </div>
+
+          <div class="form-group">
+            <label for="port">
+              <span class="label-icon">⊙</span> PORT
+            </label>
+            <input type="number" id="port" name="port" value="22" min="1" max="65535" required>
+          </div>
+
+          <div class="form-group">
+            <label for="username">
+              <span class="label-icon">⊛</span> USERNAME
+            </label>
+            <input type="text" id="username" name="username" placeholder="root" required>
+          </div>
+
+          <div class="form-group">
+            <label for="password">
+              <span class="label-icon">⊗</span> PASSWORD
+            </label>
+            <input type="password" id="password" name="password" placeholder="••••••••" required>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="saveConnection" name="saveConnection" checked>
+              <span class="checkbox-custom"></span>
+              <span>保存连接信息</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn-connect">
+            <span class="btn-icon">▶</span>
+            <span>CONNECT</span>
+          </button>
+        </form>
+      </aside>
+    </main>
+
+    <!-- 遮罩层 -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+
+    <!-- 底部状态栏 -->
+    <footer class="status-bar">
+      <div class="status-left">
+        <span class="status-item">
+          <span class="dot"></span>
+          <span id="connectionCount">0</span> ACTIVE
+        </span>
+      </div>
+      <div class="status-right">
+        <span class="status-item" id="currentTime"></span>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
