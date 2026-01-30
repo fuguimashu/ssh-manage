@@ -47,13 +47,23 @@
       <!-- 左侧：历史记录面板 -->
       <aside class="history-panel" id="historyPanel">
         <div class="panel-header">
-          <span class="panel-icon">◷</span>
-          <span>CONNECTIONS</span>
+          <div class="panel-title">
+            <span class="panel-icon">◷</span>
+            <span>CONNECTIONS</span>
+          </div>
+          <button class="panel-pin" id="panelPin" title="固定/取消固定">
+            <span class="pin-icon">📌</span>
+          </button>
         </div>
         <ul class="history-list" id="historyList">
           <!-- 动态历史记录 -->
         </ul>
       </aside>
+
+      <!-- 面板展开触发器 -->
+      <div class="panel-trigger" id="panelTrigger" title="展开连接列表">
+        <span>◷</span>
+      </div>
 
       <!-- 终端区域 -->
       <section class="terminal-area" id="terminalArea">

@@ -11,6 +11,7 @@ export class TabManager {
         this.placeholder = options.placeholder;
         this.onTabChange = options.onTabChange || (() => { });
         this.onTabClose = options.onTabClose || (() => { });
+        this.onStatusChange = options.onStatusChange || (() => { });
 
         this.tabs = new Map();
         this.activeTabId = null;
@@ -178,6 +179,9 @@ export class TabManager {
                 statusEl.classList.add('disconnected');
                 break;
         }
+
+        // 通知状态变化，更新连接计数
+        this.onStatusChange(tabId, status);
     }
 
     /**

@@ -43,6 +43,10 @@ function initApp() {
         onTabChange: updateConnectionCount,
         onTabClose: (sessionId) => {
             updateConnectionCount();
+        },
+        onStatusChange: (tabId, status) => {
+            // 连接状态变化时更新计数
+            updateConnectionCount();
         }
     });
 
@@ -83,6 +87,9 @@ function initApp() {
 
     // 渲染历史记录
     state.historyManager.render();
+
+    // 初始化面板固定功能
+    initPanelPin();
 
     console.log('[App] 初始化完成');
 }
@@ -162,6 +169,54 @@ function updateClock() {
         hour12: false
     });
     document.getElementById('currentTime').textContent = timeStr;
+}
+
+/**
+ * 初始化面板固定功能
+ */
+function initPanelPin() {
+    const panel = document.getElementById('historyPanel');
+    const pinBtn = document.getElementById('panelPin');
+    const trigger = document.getElementById('panelTrigger');
+
+    // 从 localStorage 读取固定状态，默认为固定
+    let isPinned = localStorage.getItem('panel_pinned') !== 'false';
+
+    // 应用初始状态
+    updatePanelState(isPinned);
+
+    // 固定按钮点击
+    pinBtn.addEventListener('click', () => {
+        isPinned = !isPinned;
+        localStorage.setItem('panel_pinned', isPinned);
+        updatePanelState(isPinned);
+    });
+
+    // 触发器点击 - 临时显示面板
+    trigger.addEventListener('click', () => {
+        panel.classList.remove('collapsed');
+        trigger.classList.remove('visible');
+    });
+
+    // 面板鼠标离开时，如果未固定则折叠
+    panel.addEventListener('mouseleave', () => {
+        if (!isPinned) {
+            panel.classList.add('collapsed');
+            trigger.classList.add('visible');
+        }
+    });
+
+    function updatePanelState(pinned) {
+        if (pinned) {
+            pinBtn.classList.add('pinned');
+            panel.classList.remove('collapsed');
+            trigger.classList.remove('visible');
+        } else {
+            pinBtn.classList.remove('pinned');
+            panel.classList.add('collapsed');
+            trigger.classList.add('visible');
+        }
+    }
 }
 
 // DOM 加载完成后初始化

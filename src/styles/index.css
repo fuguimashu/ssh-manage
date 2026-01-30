@@ -362,6 +362,8 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transition: transform 0.3s ease, width 0.3s ease;
+  flex-shrink: 0;
 }
 
 .panel-header {
@@ -374,12 +376,93 @@ body {
   color: var(--neon-cyan);
   display: flex;
   align-items: center;
+  justify-content: space-between;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
   gap: 8px;
 }
 
 .panel-icon {
   color: var(--neon-green);
   text-shadow: var(--glow-green);
+}
+
+/* 固定按钮 */
+.panel-pin {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  opacity: 0.6;
+}
+
+.panel-pin:hover {
+  background: var(--bg-card);
+  opacity: 1;
+}
+
+.panel-pin.pinned {
+  background: var(--neon-green);
+  border-color: var(--neon-green);
+  opacity: 1;
+}
+
+.panel-pin.pinned .pin-icon {
+  filter: brightness(0);
+}
+
+.pin-icon {
+  font-size: 14px;
+}
+
+/* 面板折叠状态 */
+.history-panel.collapsed {
+  width: 0;
+  min-width: 0;
+  padding: 0;
+  border-right: none;
+  overflow: hidden;
+}
+
+/* 面板展开触发器 */
+.panel-trigger {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 60px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--neon-green);
+  font-size: 12px;
+  z-index: 50;
+  transition: all 0.2s ease;
+}
+
+.panel-trigger:hover {
+  background: var(--bg-card);
+  width: 32px;
+  box-shadow: var(--glow-green);
+}
+
+.panel-trigger.visible {
+  display: flex;
 }
 
 /* 历史连接列表 */
