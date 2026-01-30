@@ -3,7 +3,7 @@
 一个极客风格的 SSH Web 客户端，支持多标签页管理和连接历史保存。
 
 ![SSH Manage](https://img.shields.io/badge/SSH-Manage-00ff88?style=for-the-badge&logo=terminal&logoColor=white)
-![Version](https://img.shields.io/badge/version-1.1.0-00d4ff?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-1.1.1-00d4ff?style=for-the-badge)
 
 ## ✨ 功能特性
 
@@ -100,7 +100,15 @@ ssh-manage/
 - JetBrains Mono 等宽字体
 - 发光边框和平滑动画
 
+![alt text](image.png)
+
+![alt text](image-1.png)
+
 ## 📋 更新日志
+
+### v1.1.1
+- 🐛 修复：面板展开时终端不需要预留左边距
+- 🎨 优化：终端左边距根据面板状态动态切换
 
 ### v1.1.0
 - ✨ 新增：连接面板可折叠/固定功能

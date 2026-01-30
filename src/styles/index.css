@@ -907,10 +907,16 @@ body {
   bottom: 0;
   padding: 10px;
   display: none;
+  transition: padding-left 0.3s ease;
 }
 
 .terminal-container.active {
   display: block;
+}
+
+/* 面板折叠时终端留出左边距 */
+.terminal-area.panel-collapsed .terminal-container {
+  padding-left: 30px;
 }
 
 .terminal-container .xterm {

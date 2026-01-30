@@ -178,6 +178,7 @@ function initPanelPin() {
     const panel = document.getElementById('historyPanel');
     const pinBtn = document.getElementById('panelPin');
     const trigger = document.getElementById('panelTrigger');
+    const terminalArea = document.getElementById('terminalArea');
 
     // 从 localStorage 读取固定状态，默认为固定
     let isPinned = localStorage.getItem('panel_pinned') !== 'false';
@@ -196,6 +197,7 @@ function initPanelPin() {
     trigger.addEventListener('click', () => {
         panel.classList.remove('collapsed');
         trigger.classList.remove('visible');
+        terminalArea.classList.remove('panel-collapsed');
     });
 
     // 面板鼠标离开时，如果未固定则折叠
@@ -203,6 +205,7 @@ function initPanelPin() {
         if (!isPinned) {
             panel.classList.add('collapsed');
             trigger.classList.add('visible');
+            terminalArea.classList.add('panel-collapsed');
         }
     });
 
@@ -211,10 +214,12 @@ function initPanelPin() {
             pinBtn.classList.add('pinned');
             panel.classList.remove('collapsed');
             trigger.classList.remove('visible');
+            terminalArea.classList.remove('panel-collapsed');
         } else {
             pinBtn.classList.remove('pinned');
             panel.classList.add('collapsed');
             trigger.classList.add('visible');
+            terminalArea.classList.add('panel-collapsed');
         }
     }
 }
