@@ -5,12 +5,16 @@
 import { TabManager } from './components/TabManager.js';
 import { ConnectForm } from './components/ConnectForm.js';
 import { HistoryManager } from './components/HistoryManager.js';
+import { FileManager } from './components/FileManager.js';
 
 // 全局状态
 const state = {
     tabManager: null,
     connectForm: null,
     historyManager: null,
+    fileManager: null,
+    currentView: 'terminal',
+    activeSessionId: null,
     drawerOpen: false
 };
 
@@ -40,13 +44,53 @@ function initApp() {
         container: document.getElementById('tabsContainer'),
         terminalWrapper: document.getElementById('terminalsWrapper'),
         placeholder: document.getElementById('terminalPlaceholder'),
-        onTabChange: updateConnectionCount,
+        onTabChange: (tabId) => {
+            updateConnectionCount();
+            // 更新当前会话 ID
+            if (tabId) {
+                const tab = state.tabManager.tabs.get(tabId);
+                // sessionId 存储在 terminal 组件中
+                if (tab && tab.terminal && tab.terminal.sessionId) {
+                    state.activeSessionId = tab.terminal.sessionId;
+                    // 更新文件管理器会话并刷新
+                    if (state.fileManager) {
+                        state.fileManager.setSessionId(tab.terminal.sessionId);
+                        // 如果当前在文件视图，刷新文件列表（使用保存的路径）
+                        if (state.currentView === 'files') {
+                            state.fileManager.loadDirectory();
+                        }
+                    }
+                }
+            }
+            // 显示视图切换标签
+            showViewTabs();
+        },
         onTabClose: (sessionId) => {
             updateConnectionCount();
+            // 如果没有活动标签，隐藏视图切换
+            if (state.tabManager.tabs.size === 0) {
+                hideViewTabs();
+            }
         },
         onStatusChange: (tabId, status) => {
             // 连接状态变化时更新计数
             updateConnectionCount();
+            // 连接成功时保存 sessionId
+            if (status === 'connected') {
+                const tab = state.tabManager.tabs.get(tabId);
+                // sessionId 存储在 terminal 组件中
+                console.log('[App] 连接成功, tab:', tab);
+                console.log('[App] terminal:', tab?.terminal);
+                console.log('[App] sessionId:', tab?.terminal?.sessionId);
+                if (tab && tab.terminal && tab.terminal.sessionId) {
+                    state.activeSessionId = tab.terminal.sessionId;
+                    console.log('[App] 设置 activeSessionId:', state.activeSessionId);
+                    if (state.fileManager) {
+                        state.fileManager.setSessionId(tab.terminal.sessionId);
+                        console.log('[App] 设置 FileManager sessionId:', tab.terminal.sessionId);
+                    }
+                }
+            }
         }
     });
 
@@ -90,6 +134,17 @@ function initApp() {
 
     // 初始化面板固定功能
     initPanelPin();
+
+    // 初始化文件管理器
+    state.fileManager = new FileManager({
+        container: document.getElementById('fileManagerContainer'),
+        onError: (err) => {
+            console.error('[FileManager]', err);
+        }
+    });
+
+    // 初始化视图切换
+    initViewTabs();
 
     console.log('[App] 初始化完成');
 }
@@ -222,6 +277,80 @@ function initPanelPin() {
             terminalArea.classList.add('panel-collapsed');
         }
     }
+}
+
+/**
+ * 初始化视图切换
+ */
+function initViewTabs() {
+    const viewTabs = document.getElementById('viewTabs');
+    const terminalView = document.getElementById('terminalView');
+    const filesView = document.getElementById('filesView');
+    const tabs = viewTabs.querySelectorAll('.view-tab');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const view = tab.dataset.view;
+            switchView(view);
+        });
+    });
+}
+
+/**
+ * 切换视图
+ */
+function switchView(view) {
+    const viewTabs = document.getElementById('viewTabs');
+    const terminalView = document.getElementById('terminalView');
+    const filesView = document.getElementById('filesView');
+    const tabs = viewTabs.querySelectorAll('.view-tab');
+
+    // 更新标签激活状态
+    tabs.forEach(tab => {
+        if (tab.dataset.view === view) {
+            tab.classList.add('active');
+        } else {
+            tab.classList.remove('active');
+        }
+    });
+
+    // 切换视图
+    if (view === 'terminal') {
+        terminalView.classList.remove('hidden');
+        filesView.classList.add('hidden');
+    } else if (view === 'files') {
+        terminalView.classList.add('hidden');
+        filesView.classList.remove('hidden');
+        // 加载文件目录（保持当前路径，首次加载时才用根目录）
+        console.log('[App] 切换到文件视图, activeSessionId:', state.activeSessionId);
+        console.log('[App] fileManager.sessionId:', state.fileManager?.sessionId);
+        if (state.activeSessionId && state.fileManager) {
+            // 如果文件列表为空，加载根目录；否则保持当前路径
+            if (state.fileManager.files.length === 0) {
+                state.fileManager.loadDirectory('/');
+            }
+        }
+    }
+
+    state.currentView = view;
+}
+
+/**
+ * 显示视图切换标签
+ */
+function showViewTabs() {
+    const viewTabs = document.getElementById('viewTabs');
+    viewTabs.classList.remove('hidden');
+}
+
+/**
+ * 隐藏视图切换标签
+ */
+function hideViewTabs() {
+    const viewTabs = document.getElementById('viewTabs');
+    viewTabs.classList.add('hidden');
+    // 切换回终端视图
+    switchView('terminal');
 }
 
 // DOM 加载完成后初始化

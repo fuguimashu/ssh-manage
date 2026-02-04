@@ -4,6 +4,7 @@ import { WebSocketServer } from 'ws';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { SSHManager } from './ssh-manager.js';
+import { createSFTPRoutes, cleanupSFTPSessions } from './sftp-routes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -17,6 +18,12 @@ const sessions = new Map();
 
 // 静态文件服务（生产环境）
 app.use(express.static(join(__dirname, '../dist')));
+
+// JSON 解析中间件 - 只解析 application/json 类型
+app.use(express.json({ type: 'application/json' }));
+
+// SFTP REST API 路由
+app.use('/api/sftp', createSFTPRoutes(sessions));
 
 // WebSocket 连接处理
 wss.on('connection', (ws) => {
@@ -153,6 +160,9 @@ process.on('SIGINT', () => {
     for (const [id, session] of sessions) {
         session.sshManager.disconnect();
     }
+
+    // 清理 SFTP 会话
+    cleanupSFTPSessions();
 
     wss.close(() => {
         server.close(() => {

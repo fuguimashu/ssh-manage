@@ -1,7 +1,7 @@
 {
   "name": "ssh-manage",
-  "version": "1.0.0",
-  "description": "SSH Web Client with geek-style UI",
+  "version": "2.0.0",
+  "description": "SSH Web Client with geek-style UI and SFTP file manager",
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm run server\" \"npm run client\"",

@@ -67,18 +67,38 @@
 
       <!-- 终端区域 -->
       <section class="terminal-area" id="terminalArea">
-        <div class="terminal-placeholder" id="terminalPlaceholder">
-          <div class="placeholder-content">
-            <div class="placeholder-logo">
-              <span class="placeholder-icon">⌘</span>
-              <h1 class="placeholder-title">SSH MANAGE</h1>
-              <p class="placeholder-subtitle">Secure Shell Web Terminal</p>
+        <!-- 视图切换标签 -->
+        <div class="view-tabs hidden" id="viewTabs">
+          <button class="view-tab active" data-view="terminal">
+            <span>🖥️</span> 终端
+          </button>
+          <button class="view-tab" data-view="files">
+            <span>📂</span> 文件
+          </button>
+        </div>
+
+        <!-- 终端视图 -->
+        <div class="view-content" id="terminalView">
+          <div class="terminal-placeholder" id="terminalPlaceholder">
+            <div class="placeholder-content">
+              <div class="placeholder-logo">
+                <span class="placeholder-icon">⌘</span>
+                <h1 class="placeholder-title">SSH MANAGE</h1>
+                <p class="placeholder-subtitle">Secure Shell Web Terminal</p>
+              </div>
+              <p class="placeholder-text">[ 点击 <span class="highlight">+</span> 创建新连接 ]</p>
             </div>
-            <p class="placeholder-text">[ 点击 <span class="highlight">+</span> 创建新连接 ]</p>
+          </div>
+          <div class="terminals-wrapper" id="terminalsWrapper">
+            <!-- 动态终端实例 -->
           </div>
         </div>
-        <div class="terminals-wrapper" id="terminalsWrapper">
-          <!-- 动态终端实例 -->
+
+        <!-- 文件管理器视图 -->
+        <div class="view-content hidden" id="filesView">
+          <div class="fm-container" id="fileManagerContainer">
+            <!-- FileManager 组件将渲染到这里 -->
+          </div>
         </div>
       </section>
 
